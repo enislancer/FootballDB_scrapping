@@ -130,9 +130,7 @@ def save_DB(source_path, league,startfrom,Endto):
             mydb.commit()
             print("     Successfully Inserted!")
 
-
-
-save_DB("Betting Odds Data_Filtered_England.xlsx", "eng-premier-league", 1,  3421)   #index should be real count +1 eg: Englnad: 3421
+save_DB("Betting Odds Data_Filtered_England.xlsx", "spain", 1,  3421)   #index should be real count +1 eg: Englnad: 3421
 
 
 
