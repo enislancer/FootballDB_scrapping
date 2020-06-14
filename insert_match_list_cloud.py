@@ -275,4 +275,6 @@ def add_extra_player(player_name, player_birthday,url):
     print("new player added - soccer : ", player_name, player_birthday)
     return mycursor.lastrowid
 
-insert_match_plan("2016-2017","srb-super-liga",1,240)
+
+#This is the file to insert the 2018~ 2019
+insert_match_plan("2018-2019","srb-super-liga",1,240)
