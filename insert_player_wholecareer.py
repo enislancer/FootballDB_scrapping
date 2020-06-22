@@ -67,7 +67,7 @@ def insert_player_wholecareer(season=None , league=None, pageNumber = None):
                 print(f"Error find playerid of {player_name}")
                 return
             player_id = myresult[0]
-            print(f"--------------{pageNumber}-{i}th player : id- {player_id} data handling start!-----------")
+            print(f"-------------{season}-{pageNumber}-{i}th player : id- {player_id} data handling start!-----------")
             sql = f'SELECT * FROM player_career WHERE player_id ="{player_id}"'
             mycursor.execute(sql)
             myresult = mycursor.fetchall()
@@ -115,7 +115,7 @@ def insert_player_wholecareer(season=None , league=None, pageNumber = None):
                     tr_index = tr_index +1
                         
             
-            print(f"--------------{pageNumber}-{i}th player : id- {player_id} : name: {player_name}'s data handling End !-----------")
+            print(f"-------------{season}-{pageNumber}-{i}th player : id- {player_id} : name: {player_name}'s data handling End !-----------")
             i = i+1
 
 def fn_filter_value(str):
@@ -128,7 +128,7 @@ def fn_filter_value(str):
 def fn_Get_LeagueId(league_dname, league_extra_info):
     realLeague = league_extra_info.split("/")[2]
     if league_dname == "Bundesliga":
-        #realLeague = league_extra_info.split("/")[2]
+      
         if realLeague == "bundesliga":
             return 8
         if realLeague == "aut-bundesliga":
@@ -170,7 +170,7 @@ def fn_Get_LeagueId(league_dname, league_extra_info):
     if myresult:
         return myresult[0]
     else:
-        sql = f'INSERT INTO league (league_dname ) VALUES ("{league_dname}")'
+        sql = f'INSERT INTO league (league_dname , league_title ) VALUES ("{league_dname}", "{realLeague}")'
         mycursor.execute(sql)
         mydb.commit()
         print("   -------added new league-"+league_dname + ":"+ realLeague)
@@ -204,8 +204,30 @@ def fn_Get_TeamId(team_name):
         return mycursor.lastrowid
 
 def main():
-    for i in range(13, 14):
-        insert_player_wholecareer("2014-2015", "esp-primera-division" , i)
+    
+   
+    """for i in range(1, 10):
+        insert_player_wholecareer("2014-2015", "tur-sueperlig" , i)
+    for i in range(1, 13):
+        insert_player_wholecareer("2015-2016", "tur-sueperlig" , i)
+    for i in range(1, 13):
+        insert_player_wholecareer("2016-2017", "tur-sueperlig" , i)
+    for i in range(1, 13):
+        insert_player_wholecareer("2017-2018", "tur-sueperlig" , i)
+    for i in range(6, 13):
+        insert_player_wholecareer("2018-2019", "tur-sueperlig" , i)"""
+
+    for i in range(1, 10):
+        insert_player_wholecareer("2015", "nor-eliteserien" , i)
+    for i in range(1, 10):
+        insert_player_wholecareer("2016", "nor-eliteserien" , i)
+    for i in range(1, 10):
+        insert_player_wholecareer("2017", "nor-eliteserien" , i)
+    for i in range(1, 10):
+        insert_player_wholecareer("2018", "nor-eliteserien" , i)
+    for i in range(1, 11):
+        insert_player_wholecareer("2019", "nor-eliteserien" , i)
+    
 
 if '__main__' == __name__:
     main()
