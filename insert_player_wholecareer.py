@@ -62,11 +62,27 @@ def insert_player_wholecareer(season=None , league=None, pageNumber = None):
             player_born = all_td[3].text
             sql = f'SELECT * FROM playerlist WHERE player_name ="{player_name}" and birthday = "{player_born}"'
             mycursor.execute(sql)
-            myresult = mycursor.fetchone()
+            myresult = mycursor.fetchall()
             if len(myresult) == 0:
                 print(f"Error find playerid of {player_name}")
-                return
-            player_id = myresult[0]
+                """player_height = all_td[4].text
+                player_position = all_td[5].text
+                href_info = all_td[0].find("a")['href']
+                url = "https://www.worldfootball.net"+href_info
+                player_adding_info = get_more_player_info(url , player_name)
+                print(f"this is new player- {player_name} : {player_born}")
+                sql = "INSERT INTO playerlist (player_name, birthday , nationality, img_src, height, weight, foot" \
+                      ", position ) VALUES (%s, %s , %s, %s, %s, %s, %s, %s)"
+                val = (player_name, player_born,player_adding_info[1],player_adding_info[0], \
+                               player_height, player_adding_info[2] \
+                               ,player_adding_info[3], player_position)
+                mycursor.execute(sql, val)
+                mydb.commit()
+                player_id = mycursor.lastrowid
+                print("new player added")"""
+
+            else:
+                player_id = myresult[0][0]
             print(f"-------------{season}-{pageNumber}-{i}th player : id- {player_id} data handling start!-----------")
             sql = f'SELECT * FROM player_career WHERE player_id ="{player_id}"'
             mycursor.execute(sql)
@@ -203,31 +219,58 @@ def fn_Get_TeamId(team_name):
         print("   ---------added new team-" + team_name)
         return mycursor.lastrowid
 
+def get_more_player_info(url , player_name):
+
+    page = requests.get(url,headers={"User-Agent":"Mozilla/5.0"})
+    soup = BeautifulSoup(page.content, "html.parser")
+    results = soup.find('div', itemtype="http://schema.org/Person")
+    player_img = results.find("img", alt = player_name)["src"]
+
+    player_nation_container = results.find(string = "Nationality:").findNext("td")
+    player_nation_container = player_nation_container.find_all("img")
+    count = 0
+    player_nation=""
+    for i in player_nation_container:
+        if count > 0:
+            player_nation +=","
+        player_nation += i['alt']
+        count += 1
+
+    player_weight = "???"
+    if results.find(string="Weight:"):
+        player_weight = results.find(string="Weight:").findNext("td").text.strip()
+    player_foot = "???"
+    if results.find(string="Foot:"):
+        player_foot = results.find(string = "Foot:").findNext("td").text.strip()
+
+    return_list = [player_img, player_nation, player_weight, player_foot]
+    return return_list
+
 def main():
     
    
-    """for i in range(1, 10):
-        insert_player_wholecareer("2014-2015", "tur-sueperlig" , i)
-    for i in range(1, 13):
-        insert_player_wholecareer("2015-2016", "tur-sueperlig" , i)
-    for i in range(1, 13):
-        insert_player_wholecareer("2016-2017", "tur-sueperlig" , i)
-    for i in range(1, 13):
-        insert_player_wholecareer("2017-2018", "tur-sueperlig" , i)
-    for i in range(6, 13):
-        insert_player_wholecareer("2018-2019", "tur-sueperlig" , i)"""
+    for i in range(1, 12):
+        insert_player_wholecareer("2014-2015", "hun-nb-i" , i)
+    for i in range(1, 9):
+        insert_player_wholecareer("2015-2016", "hun-nb-i" , i)
+    for i in range(1, 8):
+        insert_player_wholecareer("2016-2017", "hun-nb-i" , i)
+    for i in range(1, 8):
+        insert_player_wholecareer("2017-2018", "hun-nb-i" , i)
+    for i in range(1, 9):
+        insert_player_wholecareer("2018-2019", "hun-nb-i" , i)
 
-    for i in range(1, 10):
-        insert_player_wholecareer("2015", "nor-eliteserien" , i)
-    for i in range(1, 10):
-        insert_player_wholecareer("2016", "nor-eliteserien" , i)
-    for i in range(1, 10):
-        insert_player_wholecareer("2017", "nor-eliteserien" , i)
-    for i in range(1, 10):
-        insert_player_wholecareer("2018", "nor-eliteserien" , i)
+    for i in range(1, 12):
+        insert_player_wholecareer("2014-2015", "srb-super-liga" , i)
     for i in range(1, 11):
-        insert_player_wholecareer("2019", "nor-eliteserien" , i)
-    
+        insert_player_wholecareer("2015-2016", "srb-super-liga" , i)
+    for i in range(1, 11):
+        insert_player_wholecareer("2016-2017", "srb-super-liga" , i)
+    for i in range(1, 11):
+        insert_player_wholecareer("2017-2018", "srb-super-liga" , i)
+    for i in range(1, 11):
+        insert_player_wholecareer("2018-2019", "srb-super-liga" , i)
+
 
 if '__main__' == __name__:
     main()
